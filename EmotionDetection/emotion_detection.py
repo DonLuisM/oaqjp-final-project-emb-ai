@@ -34,6 +34,6 @@ def emotion_detector(text_to_analyse):
             "dominant emotion": dominant_emotion
         }
 
-        return (json.dumps(result, indent=4))
+        return result
     else:
         return {"error": f"Request failed with status {response.status_code}"}
