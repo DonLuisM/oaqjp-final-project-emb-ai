@@ -28,7 +28,7 @@ def emotion_detector(text_to_analyse):
             "dominant emotion": None
         }
 
-    if response.status_code == 200:
+    elif response.status_code == 200:
         response_dict = response.json()
         emotions = response_dict.get("emotionPredictions", [{}])[0].get("emotion", {})
         if not emotions:
