@@ -2,6 +2,15 @@ import requests
 import json
 
 def emotion_detector(text_to_analyse): 
+    if not text_to_analyse.strip():
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant emotion": None
+        }
 
     URL= 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
     Headers= {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
@@ -9,12 +18,20 @@ def emotion_detector(text_to_analyse):
 
     response = requests.post(URL, headers=Headers, json=payload)
 
+    if response.status_code == 400:
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant emotion": None
+        }
+
     if response.status_code == 200:
         response_dict = response.json()
-        
         emotions = response_dict.get("emotionPredictions", [{}])[0].get("emotion", {})
-
-        if not emotions:  # Si la API no devuelve emociones, manejar el caso
+        if not emotions:
             return {"error": "No emotions detected"}
 
         anger = emotions.get("anger", 0)
